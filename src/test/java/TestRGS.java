@@ -149,13 +149,13 @@ public class TestRGS extends BaseTest {
         String errEmailXpath = "//span[text() = 'Введите корректный адрес электронной почты']";
         WebElement errEmail = driver.findElement(By.xpath(errEmailXpath));
         waitUtilElementToBeVisible(errEmail);
-        Assert.assertEquals("Проверка ошибки у поля не была пройдена",
+        Assert.assertEquals("Проверка ошибки у поля \"Email\" не была пройдена",
                 "Введите корректный адрес электронной почты", errEmail.getText());
 
         String errAddressXpath = "//span[text() = 'Поле обязательно']";
         WebElement errAddress = driver.findElement(By.xpath(errAddressXpath));
         waitUtilElementToBeVisible(errAddress);
-        Assert.assertEquals("Проверка ошибки у поля не была пройдена",
+        Assert.assertEquals("Проверка ошибки у поля \"Адрес\" не была пройдена",
                 "Поле обязательно", errAddress.getText());
     }
 
