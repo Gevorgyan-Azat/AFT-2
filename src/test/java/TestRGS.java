@@ -9,6 +9,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 @RunWith(Parameterized.class)
 public class TestRGS extends BaseTest {
@@ -28,9 +29,9 @@ public class TestRGS extends BaseTest {
     @Parameterized.Parameters
     public static Collection params(){
         return Arrays.asList(new Object[][]{
-                {"Иванов Иван Иванович","1111111111", "IvanovEmail", "г. Москва"},
-                {"Петров Андрей Викторович","2222222222", "PetrovEmail", "г. Сочи"},
-                {"Абрамов Максим Сергеевич","3333333333", "AbramovEmail", "г. Иркутск"},});
+                {"Иванов Иван Иванович","1111111111", "IvanovEmail", "Москва"},
+                {"Петров Андрей Викторович","2222222222", "PetrovEmail", "Сочи"},
+                {"Абрамов Максим Сергеевич","3333333333", "AbramovEmail", "Иркутск"},});
     }
 
     @Test
@@ -119,7 +120,7 @@ public class TestRGS extends BaseTest {
         fillInputField(driver.findElement(By.xpath(String.format(fieldXPath, "userName"))), userName);
         fillInputFieldForPhone(driver.findElement(By.xpath(String.format(fieldXPath, "userTel"))), userTel);
         fillInputField(driver.findElement(By.xpath(String.format(fieldXPath, "userEmail"))), userEmail);
-        fillInputField(driver.findElement(By.xpath(addressXpath)), userAddress);
+        fillInputFieldForAddress(driver.findElement(By.xpath(addressXpath)), userAddress);
 
 
         //Клик по checkBox
@@ -153,12 +154,12 @@ public class TestRGS extends BaseTest {
         Assert.assertEquals("Проверка ошибки у поля \"Email\" не была пройдена",
                 "Введите корректный адрес электронной почты", errEmail.getText());
 
-        String fieldAddressXpath = "//label[contains(@class, 'input__label') and text()='Ваш адрес']";
-        WebElement fieldAddress = driver.findElement(By.xpath(fieldAddressXpath));
-        waitUtilElementToBeVisible(fieldAddress);
-        WebElement errAddress = fieldAddress.findElement(By.xpath("./../span"));
-        Assert.assertEquals("Проверка ошибки у поля \"Адрес\" не была пройдена",
-                "Поле обязательно", errAddress.getText());
+//        String fieldAddressXpath = "//label[contains(@class, 'input__label') and text()='Ваш адрес']";
+//        WebElement fieldAddress = driver.findElement(By.xpath(fieldAddressXpath));
+//        waitUtilElementToBeVisible(fieldAddress);
+//        WebElement errAddress = fieldAddress.findElement(By.xpath("./../span"));
+//        Assert.assertEquals("Проверка ошибки у поля \"Адрес\" не была пройдена",
+//                "Поле обязательно", errAddress.getText());
     }
 
 
@@ -187,6 +188,18 @@ public class TestRGS extends BaseTest {
         element.sendKeys(value);
         boolean checkFlag = wait.until(ExpectedConditions.attributeContains(element, "value", value));
         Assert.assertTrue("Поле было заполнено некорректно", checkFlag);
+    }
+    private void fillInputFieldForAddress(WebElement element, String value) {
+        scrollToElementJs(element);
+        waitUtilElementToBeClickable(element);
+        element.click();
+        element.clear();
+        element.sendKeys(value);
+        List<WebElement> dropdown = driver.findElements(By.xpath("//span[contains(@class, 'suggestions-item')]"));
+        scrollToElementJs(dropdown.get(0));
+        waitUtilElementToBeVisible(dropdown.get(0));
+        dropdown.get(0).click();
+        Assert.assertTrue("Поле было заполнено некорректно", element.getAttribute("value").contains(value));
     }
 
     private void fillInputFieldForPhone(WebElement element, String value) {
