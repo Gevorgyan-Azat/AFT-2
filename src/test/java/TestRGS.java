@@ -145,16 +145,18 @@ public class TestRGS extends BaseTest {
         waitUtilElementToBeClickable(contactMe);
         contactMe.click();
 
-        //Проверка наличия сообщения об ошибке
-        String errEmailXpath = "//span[text() = 'Введите корректный адрес электронной почты']";
-        WebElement errEmail = driver.findElement(By.xpath(errEmailXpath));
-        waitUtilElementToBeVisible(errEmail);
+        //Проверка наличия сообщений об ошибке
+        String fieldEmailXpath = "//label[contains(@class, 'input__label') and text()='Ваша почта']";
+        WebElement fieldEmail = driver.findElement(By.xpath(fieldEmailXpath));
+        waitUtilElementToBeVisible(fieldEmail);
+        WebElement errEmail = fieldEmail.findElement(By.xpath("./../span"));
         Assert.assertEquals("Проверка ошибки у поля \"Email\" не была пройдена",
                 "Введите корректный адрес электронной почты", errEmail.getText());
 
-        String errAddressXpath = "//span[text() = 'Поле обязательно']";
-        WebElement errAddress = driver.findElement(By.xpath(errAddressXpath));
-        waitUtilElementToBeVisible(errAddress);
+        String fieldAddressXpath = "//label[contains(@class, 'input__label') and text()='Ваш адрес']";
+        WebElement fieldAddress = driver.findElement(By.xpath(fieldAddressXpath));
+        waitUtilElementToBeVisible(fieldAddress);
+        WebElement errAddress = fieldAddress.findElement(By.xpath("./../span"));
         Assert.assertEquals("Проверка ошибки у поля \"Адрес\" не была пройдена",
                 "Поле обязательно", errAddress.getText());
     }
