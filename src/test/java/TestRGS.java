@@ -107,11 +107,7 @@ public class TestRGS extends BaseTest {
                 "Оперативно перезвоним\n" +
                         "для оформления полиса", titlePolicy.getText());
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        try { Thread.sleep(1000); } catch (InterruptedException ignore) {}
 
 
         // заполнить поля данными
@@ -134,17 +130,13 @@ public class TestRGS extends BaseTest {
         waitUtilElementToBeVisible(checkBoxChecked);
         Assert.assertTrue(checkBoxChecked.getAttribute("class").contains("is-checked"));
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        try { Thread.sleep(1000); } catch (InterruptedException ignore) {}
 
         //Нажатие по кнопке "Свяжитесь со мной"
         String contactMeXpath = "//button[contains(@class, 'form__button-submit')]";
         WebElement contactMe = driver.findElement(By.xpath(contactMeXpath));
         waitUtilElementToBeClickable(contactMe);
-        contactMe.click();
+        js.executeScript("arguments[0].click();", contactMe);
 
         //Проверка наличия сообщений об ошибке
         String fieldEmailXpath = "//label[contains(@class, 'input__label') and text()='Ваша почта']";
@@ -172,10 +164,6 @@ public class TestRGS extends BaseTest {
         wait.until(ExpectedConditions.elementToBeClickable(element));
     }
 
-    private void waitUtilElementToBeVisible(By locator) {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
-    }
-
     private void waitUtilElementToBeVisible(WebElement element) {
         wait.until(ExpectedConditions.visibilityOf(element));
     }
@@ -199,6 +187,7 @@ public class TestRGS extends BaseTest {
         scrollToElementJs(dropdown.get(0));
         waitUtilElementToBeVisible(dropdown.get(0));
         dropdown.get(0).click();
+        try { Thread.sleep(500); } catch (Exception ignore) {}
         Assert.assertTrue("Поле было заполнено некорректно", element.getAttribute("value").contains(value));
     }
 
