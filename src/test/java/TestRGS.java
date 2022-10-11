@@ -4,6 +4,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
@@ -168,6 +169,10 @@ public class TestRGS extends BaseTest {
         wait.until(ExpectedConditions.visibilityOf(element));
     }
 
+    private void waitUtilElementToBeVisible(By element) {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(element));
+    }
+
     private void fillInputField(WebElement element, String value) {
         scrollToElementJs(element);
         waitUtilElementToBeClickable(element);
@@ -183,12 +188,11 @@ public class TestRGS extends BaseTest {
         element.click();
         element.clear();
         element.sendKeys(value);
-        List<WebElement> dropdown = driver.findElements(By.xpath("//span[contains(@class, 'suggestions-item')]"));
-        scrollToElementJs(dropdown.get(0));
-        waitUtilElementToBeVisible(dropdown.get(0));
-        dropdown.get(0).click();
-        try { Thread.sleep(500); } catch (Exception ignore) {}
-        Assert.assertTrue("Поле было заполнено некорректно", element.getAttribute("value").contains(value));
+        waitUtilElementToBeVisible(By.xpath("//span[contains(@class, 'suggestions-item')]"));
+        element.sendKeys(Keys.ARROW_DOWN);
+        element.sendKeys(Keys.ENTER);
+        Assert.assertTrue("Поле было заполнено некорректно",
+                element.getAttribute("value").contains(value));
     }
 
     private void fillInputFieldForPhone(WebElement element, String value) {
